@@ -99,17 +99,19 @@ disable_fbe() {
   # A50 = fstab.exynos9610.
   # Tab A 10.1 range = fstab.exynos7885.
   # Snapdragon devices = fstab.qcom.
+  # Tab A9+ and A05s = fstab.default
   #
-  for i in /vendor/etc/fstab.exynos* \
-	   /vendor/etc/fstab.qcom*; do
-    if [ -f $i ]; then
-      ui_print " -   Found $i."
-      md5=$( md5 $i )
-      # This comments out the offending line and adds an edited one.
-      sed -i -e 's/^\([^#].*\)fileencryption=[^,]*\(.*\)$/# &\n\1encryptable\2/g' $i
-      file_changed $i $md5
-    fi
-  done
+for i in /vendor/etc/fstab.exynos* \
+    /vendor/etc/fstab.qcom* \
+    /vendor/etc/fstab.default*; do
+    if [ -f $i ]; then
+      ui_print " -   Found $i."
+      md5=$( md5 $i )
+      # This comments out the offending line and adds an edited one.
+      sed -i -e 's/^\([^#].*\)fileencryption=[^,]*\(.*\)$/# &\n\1encryptable\2/g' $i
+      file_changed $i $md5
+    fi
+  done
 }
 
 disable_vaultkeeper() {
